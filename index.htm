@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix-Inspired Site</title>
+    <!-- Include Tailwind CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .movie-card {
+            /* Existing styles for the movie card */
+            background: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            transition: border 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            /* Add transition effect on border, box-shadow, and background-color */
+        }
+        
+        .movie-card:hover {
+            background-color: #d93025;
+            /* Red background color on hover */
+            border: 2px solid #d93025;
+            /* Red border on hover */
+            box-shadow: 0 4px 8px rgba(217, 48, 37, 0.3);
+            /* Elevation effect on hover */
+        }
+        /* Glassmorphism Navbar Styles */
+        
+        nav {
+            background: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        nav h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: #d93025;
+            /* Red color for the title */
+        }
+        
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        
+        nav ul li {
+            margin-right: 1rem;
+        }
+        /* Featured Content Styles */
+        
+        .featured-content {
+            padding: 5rem 1rem;
+            text-align: center;
+        }
+        /* Hero Section Styles */
+        
+        .hero {
+            background: url('https://images.unsplash.com/photo-1638455153080-e5127e959224?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat fixed;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 30, 30, 0.558);
+            backdrop-filter: blur(1px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin: 0;
+            color: #d93025;
+            /* Red color for the text */
+        }
+        /* Top Movies Section Styles */
+        
+        .section {
+            background-color: black;
+            color: white;
+            padding: 3rem 1rem;
+        }
+        
+        .movie-card {
+            background: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        
+        .movie-card img {
+            width: 100%;
+            height: auto;
+            border-bottom: 2px solid #d93025;
+            /* Red border for the image */
+        }
+        
+        .movie-card-content {
+            padding: 1rem;
+        }
+        
+        .movie-card h3 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        .movie-card p {
+            font-size: 1rem;
+            margin: 0;
+        }
+    </style>
+    <script>
+        // Select all delete buttons
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+
+        // Add click event listener to each delete button
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Get the ID of the movie associated with the clicked delete button
+                const movieId = button.closest('.movie-card').dataset.id;
+                // Call the deleteMovie function with the movie ID
+                deleteMovie(movieId);
+            });
+        });
+
+        // Function to delete a movie by ID
+        function deleteMovie(movieId) {
+            // Send a DELETE request to the server with the movie ID
+            fetch(`/movies/${movieId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // If deletion is successful, reload the page
+                        window.location.reload();
+                    } else {
+                        // If deletion fails, display an error message
+                        console.error('Failed to delete movie');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</head>
+
+<body class="bg-black text-white">
+
+    <!-- Glassmorphism Navbar -->
+    <nav class="shadow-lg">
+        <h1>Netflix</h1>
+        <ul>
+            <li>Home</li>
+            <li>TV Shows</li>
+            <li>Movies</li>
+            <li>My List</li>
+            <button type="button" style="color: #d93025;"><a href="login.html">
+                <li>Sign in</li>
+            </a></button>
+            <button type="button" style="color: #d93025;"><a href="signup.html">
+                <li>Register</li></button>
+            </a>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay">
+            <h1>Welcome to Netflix</h1>
+            <p class="text-lg">Enjoy a wide range of movies and TV shows at your fingertips.</p>
+        </div>
+    </section>
+
+    <!-- Top Movies Section -->
+    <section class="section">
+        <h2 class="text-2xl mb-4">Top Movies on Netflix</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <!-- Movie Card 1 -->
+            <div class="movie-card" data-id="1">
+                <img src="https://images.unsplash.com/photo-1510827220565-c6a086ff31c8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Movie Poster">
+                <div class="movie-card-content">
+                    <h3 class="text-xl mb-2">Movie Title 1</h3>
+                    <p class="text-sm">Description of the movie.</p>
+                    <p class="text-xs mt-2">Release Year: 2022</p>
+                    <p class="text-xs">Rating: 8.5</p>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            </div>
+
+            <!-- Movie Card 2 -->
+            <div class="movie-card" data-id="2">
+                <img src="https://images.unsplash.com/photo-1510511450816-30c68106b199?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Movie Poster">
+                <div class="movie-card-content">
+                    <h3 class="text-xl mb-2">Movie Title 2</h3>
+                    <p class="text-sm">Description of the movie.</p>
+                    <p class="text-xs mt-2">Release Year: 2021</p>
+                    <p class="text-xs">Rating: 9.0</p>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            </div>
+
+            <!-- Movie Card 3 -->
+            <div class="movie-card" data-id="3">
+                <img src="https://images.unsplash.com/photo-1524168272322-bf73616d9cb5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Movie Poster">
+                <div class="movie-card-content">
+                    <h3 class="text-xl mb-2">Movie Title 3</h3>
+                    <p class="text-sm">Description of the movie.</p>
+                    <p class="text-xs mt-2">Release Year: 2020</p>
+                    <p class="text-xs">Rating: 8.7</p>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            </div>
+
+            <!-- Movie Card 4 -->
+            <div class="movie-card" data-id="4">
+                <img src="https://images.unsplash.com/photo-1477414956199-7dafc86a4f1a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Movie Poster">
+                <div class="movie-card-content">
+                    <h3 class="text-xl mb-2">Movie Title 4</h3>
+                    <p class="text-sm">Description of the movie.</p>
+                    <p class="text-xs mt-2">Release Year: 2019</p>
+                    <p class="text-xs">Rating: 8.3</p>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+    <!-- Top Views Section -->
+    <section class="section">
+        <h2 class="text-2xl mb-4">Top Views on Netflix</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <!-- Movie Card 1 -->
+            <div class="movie-card" data-id="5">
+                <img src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Movie Poster">
+                <div class="movie-card-content">
+                    <h3 class="text-xl mb-2">Popular Movie 1</h3>
+                    <p class="text-sm">Description of the popular movie.</p>
+                    <p class="text-xs mt-2">Release Year: 2021</p>
+                    <p class="text-xs">Rating: 9.2</p>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            </div>
+
+            <!-- Movie Card 2 -->
+            <div class="movie-card" data-id="6">
+                <img src="https://images.unsplash.com/photo-1601925662822-510b76665bd9?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Movie Poster">
+                <div class="movie-card-content">
+                    <h3 class="text-xl mb-2">Popular Movie 2</h3>
+                    <p class="text-sm">Description of the popular movie.</p>
+                    <p class="text-xs mt-2">Release Year: 2020</p>
+                    <p class="text-xs">Rating: 8.9</p>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            </div>
+
+            <!-- Movie Card 3 -->
+            <div class="movie-card" data-id="7">
+                <img src="https://images.unsplash.com/photo-1570745859748-6ba2014423eb?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Movie Poster">
+                <div class="movie-card-content">
+                    <h3 class="text-xl mb-2">Popular Movie 3</h3>
+                    <p class="text-sm">Description of the popular movie.</p>
+                    <p class="text-xs mt-2">Release Year: 2019</p>
+                    <p class="text-xs">Rating: 8.7</p>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            </div>
+
+            <!-- Movie Card 4 -->
+            <div class="movie-card" data-id="8">
+                <img src="https://images.unsplash.com/photo-1563341932-0c7e1870d40f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Movie Poster">
+                <div class="movie-card-content">
+                    <h3 class="text-xl mb-2">Popular Movie 4</h3>
+                    <p class="text-sm">Description of the popular movie.</p>
+                    <p class="text-xs mt-2">Release Year: 2018</p>
+                    <p class="text-xs">Rating: 8.5</p>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
